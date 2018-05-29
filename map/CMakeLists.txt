@@ -114,4 +114,5 @@ omim_add_test_subdirectory(style_tests)
 
 if (PLATFORM_DESKTOP)
   add_subdirectory(benchmark_tool)
+  add_subdirectory(extrapolation_benchmark)
 endif()
