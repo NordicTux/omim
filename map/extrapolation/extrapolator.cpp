@@ -102,13 +102,13 @@ bool AreCoordsGoodForExtrapolation(location::GpsInfo const & beforeLastGpsInfo,
   // all extrapolated points in any cases.
   double const maxDistForAllExtrapolationsM =
       kMaxExtrapolationSpeedMPS / kMaxExtrapolationTimeSeconds;
-  double const distLastToMeridian180 = ms::DistanceOnEarth(
+  double const distLastGpsInfoToMeridian180 = ms::DistanceOnEarth(
       lastGpsInfo.m_latitude, lastGpsInfo.m_longitude, lastGpsInfo.m_latitude, 180.0 /* lon2Deg */);
   // Switching off extrapolation if |lastGpsInfo| are so close to meridian 180 that extrapolated
   // points may cross meridian 180 or if |beforeLastGpsInfo| and |lastGpsInfo| are located on
   // different sides of meridian 180.
-  if (distLastToMeridian180 < maxDistAfterExtrapolationM ||
-      (distLastToMeridian180 < maxDistForAllExtrapolationsM &&
+  if (distLastGpsInfoToMeridian180 < maxDistAfterExtrapolationM ||
+      (distLastGpsInfoToMeridian180 < maxDistForAllExtrapolationsM &&
        lastGpsInfo.m_longitude * beforeLastGpsInfo.m_longitude < 0.0) ||
       ms::DistanceOnEarth(lastGpsInfo.m_latitude, lastGpsInfo.m_longitude, 90.0 /* lat2Deg */,
                           lastGpsInfo.m_longitude) < maxDistAfterExtrapolationM ||
@@ -124,7 +124,7 @@ bool AreCoordsGoodForExtrapolation(location::GpsInfo const & beforeLastGpsInfo,
 
   // @TODO(bykoianko) Switching off extrapolation based on acceleration should be implemented.
   // Switching off extrapolation based on speed, distance and time.
-  return timeS > 0 && distM / timeS <= kMaxExtrapolationSpeedMPS &&
+  return distM / timeS <= kMaxExtrapolationSpeedMPS &&
          distM <= kMaxExtrapolationDistMeters && timeS <= kMaxExtrapolationTimeSeconds;
 }
 
